@@ -4,21 +4,19 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.iyzico.todo.domain.CurrentUser;
 import com.iyzico.todo.domain.ToDo;
 import com.iyzico.todo.domain.User;
 import com.iyzico.todo.model.ToDoFormModel;
 import com.iyzico.todo.service.ToDoServiceImpl;
 
 @Controller
-public class ToDoController {
+public class ToDoController extends BaseController{
 	
 	@Autowired
     private ToDoServiceImpl toDoService;
@@ -28,9 +26,9 @@ public class ToDoController {
 	public String getToDoListView(Model model) {
 		
 		Iterable<ToDo> list = null;
-		CurrentUser user = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(user != null){
-			list = toDoService.list(user.getUser());	
+		User currentUser = getCurrentUser();
+		if(currentUser != null){
+			list = toDoService.list(currentUser);	
 		}
 		model.addAttribute("todos", list);
 		return "web/content/todolist";
@@ -48,24 +46,24 @@ public class ToDoController {
     public String createToDo(@Valid ToDoFormModel toDoModel, BindingResult bindingResult, Model model) {
         
 		if (bindingResult.hasErrors()) {
-			return "web/content/createToDo";
+			return "redirect:createToDo.html";
 		}
 		
-		CurrentUser currentUser = (CurrentUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User currentUser = getCurrentUser();
+		
 		if(currentUser != null){
-			User user = currentUser.getUser();
 			ToDo toDo = new ToDo();
 			toDo.setEndDate(toDoModel.getEndDate());
 			toDo.setStartDate(toDoModel.getStartDate());
 			toDo.setTitle(toDoModel.getTitle());
 			toDo.setSubTitle(toDoModel.getSubTitle());
 			toDo.setContent(toDoModel.getContent());
-			toDo.setUser(user);
+			toDo.setUser(currentUser);
 			toDoService.createToDo(toDo);
 			return "redirect:todolist.html";
 		}
 		
-		return "web/content/createToDo";
+		return "redirect:createToDo.html";
         
     }
 }

@@ -11,13 +11,8 @@ import com.iyzico.todo.service.UserService;
 @Component
 public class UserCreateFormValidator implements Validator {
 
-    @SuppressWarnings("unused")
-	private final UserService userService;
-
-    @Autowired
-    public UserCreateFormValidator(UserService userService) {
-        this.userService = userService;
-    }
+	@Autowired
+	private UserService userService;
 
     @Override
     public boolean supports(Class<?> clazz) {
@@ -28,11 +23,18 @@ public class UserCreateFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
         UserSignUpFormModel form = (UserSignUpFormModel) target;
         validatePasswords(errors, form);
+        checkExistUserEmail(errors, form.getEmail());
     }
 
-    private void validatePasswords(Errors errors, UserSignUpFormModel form) {
+    private void checkExistUserEmail(Errors errors, String email) {
+    	if (userService.findByEmail(email) != null) {
+            errors.rejectValue("email", "Duplicate.userForm.email");
+        }
+	}
+
+	private void validatePasswords(Errors errors, UserSignUpFormModel form) {
         if (!form.getPassword().equals(form.getPasswordRepeated())) {
-            errors.reject("password.no_match", "Passwords do not match");
+            errors.rejectValue("passwordRepeated", "Passwords do not match");
         }
     }
 

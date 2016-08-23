@@ -3,6 +3,7 @@ package com.iyzico.todo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.iyzico.todo.domain.Role;
 import com.iyzico.todo.domain.User;
 import com.iyzico.todo.repository.UserRepository;
 
@@ -15,6 +16,12 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User findByEmail(String email) {
 		User user = userRepository.findByEmail(email);
+		return user;
+	}
+	
+	@Override
+	public User findByUsername(String username) {
+		User user = userRepository.findByUserName(username);
 		return user;
 	}
 	
@@ -35,16 +42,10 @@ public class UserServiceImpl implements UserService{
 			user.setEmail(email);
 			user.setName(userName);
 			user.setPassword(password);
+			user.setRole(Role.USER);
 			userRepository.save(user);
 			return true;
 		}
 		return false;
-	}
-
-	
-	
-	
-	
-    
-    
+	}    
 }

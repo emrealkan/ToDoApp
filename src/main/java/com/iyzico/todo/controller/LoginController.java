@@ -3,14 +3,13 @@ package com.iyzico.todo.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.iyzico.todo.model.UserSignUpFormModel;
+import com.iyzico.todo.service.SecurityService;
 import com.iyzico.todo.service.UserServiceImpl;
 
 @Controller
@@ -18,6 +17,9 @@ public class LoginController {
 
 	@Autowired
     private UserServiceImpl userService;
+	
+	@Autowired
+    private SecurityService securityService;
 	
 	@RequestMapping(value="/login", method=RequestMethod.GET)
 	public String getLoginView() {
@@ -29,22 +31,17 @@ public class LoginController {
 		return "web/content/signup";
 	}
 	
-    @RequestMapping(value = "/signup", method = RequestMethod.POST)
-    public String handleUserCreateForm(@Valid @ModelAttribute("form") UserSignUpFormModel form, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            // failed validation
-            return "user_create";
-        }
-        try {
-        	userService.createUser(form.getUserName(), form.getEmail(), form.getPassword());
-        } catch (DataIntegrityViolationException e) {
-            // probably email already exists - very rare case when multiple admins are adding same user
-            // at the same time and form validation has passed for more than one of them.
-            bindingResult.reject("email.exists", "Email already exists");
-            return "web/content/login";
-        }
-        // ok, redirect
-        return "redirect:/web/content/todolist";
-    }
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public String handleUserCreateForm(@Valid UserSignUpFormModel signupModel, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "signup";
+		}
+
+		if (userService.createUser(signupModel.getUserName(), signupModel.getEmail(), signupModel.getPassword())) {
+			securityService.autologin(signupModel.getUserName(), signupModel.getPassword());
+			return "redirect:/user/todolist.html";
+		}
+		return "signup";
+	}
 
 }

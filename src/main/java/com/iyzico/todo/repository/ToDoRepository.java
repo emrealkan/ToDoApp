@@ -7,8 +7,8 @@ import com.iyzico.todo.domain.ToDo;
 import com.iyzico.todo.domain.User;
 
 @Repository
-public interface ToDoRepository extends JpaRepository<ToDo, Long>{
-	
+public interface ToDoRepository extends JpaRepository<ToDo, Long> {
+
 	Iterable<ToDo> findAllByUser(User user);
-	
+
 }
