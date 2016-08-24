@@ -1,26 +1,17 @@
 package com.iyzico.todo.model;
 
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import com.iyzico.todo.domain.Role;
 
 public class UserSignUpFormModel {
 	
-	@NotEmpty
-    private String email = "";
+	private String email;
 	
-	@NotEmpty
-    private String userName = "";
+	private String userName;
 
-    @NotEmpty
-    private String password = "";
+	private String password;
     
-    @NotEmpty
-    private String passwordRepeated = "";
+	private String passwordRepeated;
     
-    @NotNull
     private Role role = Role.USER;
     
     public String getUserName() {
