@@ -38,19 +38,28 @@
 					<!-- START TAB 1 -->
 					<div id="tab_1" class="tab-pane active">
 						<div id="accordion1" class="panel-group">
-							<div class="panel panel-default" th:each="todo,iterationStatus : ${todos}">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" 
-										th:href="@{'#'+${iterationStatus.count}}" href="#" th:text="${todo.title}"></a>
-									</h4>
-								</div>
-								<div th:id="${iterationStatus.count}" class="panel-collapse collapse">
-									<div class="panel-body" th:text="${todo.content}">
-										
+					    	<div class="panel panel-default" th:each="todo,iterationStatus : ${todos}">
+								<form th:action="@{|/user/deleteToDo/${todo.id}|}" method="post">
+									<div class="panel-heading">
+										<h4 class="panel-todoTitle" >
+											<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion1" 
+												th:href="@{'#'+${iterationStatus.count}}" href="#" th:text="${todo.title}">
+											</a>
+											<span  class="panel-subtitle" th:text="${todo.subTitle}"></span>
+										</h4>
 									</div>
-									<button type="submit" class="btn theme-btn">Delete</button>
-								</div>
+									<div th:id="${iterationStatus.count}" class="panel-collapse collapse">
+										<div class="col-md-6" >
+											<ul class="list-unstyled">
+												<li style="padding-top:10px"></li>
+												<li style="padding-top:10px; color:red"><i class="fa fa-check"></i> Start Date:<span class="panel-subtitle" th:text="${todo.startDate}"></span></li>
+												<li style="padding-top:10px; color:red"><i class="fa fa-check"></i> End Date:<span class="panel-subtitle" th:text="${todo.endDate}"></span></li>
+												<li style="padding-top:10px; color:red"><i class="fa fa-check"></i> Content: <span class="panel-subtitle" th:text="${todo.content}"></span></li>
+												<li style="padding-top:10px"><button type="submit" style="background-color: red !important" class="btn theme-btn" name="delete">Delete</button></li>
+											</ul>
+										</div> 
+									</div>
+								</form>
 							</div>
 						</div>
 					</div>

@@ -24,12 +24,8 @@ public class ToDoServiceImpl implements ToDoService{
 	}
 
 	@Override
-	public Boolean deleteToDo(ToDo todo, User user) {
-		if (todo.getUser().getId() == user.getId()){
-			todoRepository.delete(todo);
-			return true;
-		}
-		return false;
+	public void deleteToDoById(long id) {
+		todoRepository.delete(id);
 	}
 
 }

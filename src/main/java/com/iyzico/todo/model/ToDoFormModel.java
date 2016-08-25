@@ -2,19 +2,14 @@ package com.iyzico.todo.model;
 
 import java.sql.Date;
 
-import javax.validation.constraints.Size;
-
 public class ToDoFormModel {
 	
-	@Size(min=4, max=35)
 	private String title;
-	
-	@Size(min=4, max=35)
 	private String subTitle;
-	
 	private String content;
 	private Date startDate;
 	private Date endDate;
+	
 	public String getTitle() {
 		return title;
 	}

@@ -27,13 +27,10 @@ public class UserCreateFormValidator implements Validator {
             checkExistUserName(errors, form.getUserName());
             checkExistUserEmail(errors, form.getEmail());
         }
-        
     }
 
     private boolean checkEmptyValue(Errors errors, UserSignUpFormModel form) {
-		
     	boolean isError = false;
-    	
     	if(form.getEmail().isEmpty()){
 			errors.rejectValue("userName", "error.username.not.empty");
 			isError = true;

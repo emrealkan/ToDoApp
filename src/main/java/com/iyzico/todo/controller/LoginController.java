@@ -42,6 +42,16 @@ public class LoginController {
 		return "web/content/login";
 	}
 	
+	@RequestMapping(value={"/about"}, method=RequestMethod.GET)
+	public String getLogin() {
+		return "web/content/about";
+	}
+	
+	@RequestMapping(value={"/home"}, method=RequestMethod.GET)
+	public String getLon() {
+		return "web/content/home";
+	}
+	
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String getSignupView(Model model) {
 		model.addAttribute("signupModel",new UserSignUpFormModel());
