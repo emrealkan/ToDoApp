@@ -1,26 +1,41 @@
 package com.iyzico.todo.domain;
 
-import org.springframework.security.core.authority.AuthorityUtils;
+import java.io.Serializable;
+import java.security.Principal;
 
-public class CurrentUser extends org.springframework.security.core.userdetails.User {
+public class CurrentUser implements Principal, Serializable {
 
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private User user;
+	private String name;
+	private String userRole;
+	
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	
+	public String getUserRole() {
+		return userRole;
+	}
 
-    public CurrentUser(User user) {
-        super(user.getEmail(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole().toString()));
-        this.user = user;
-    }
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
     public User getUser() {
         return user;
-    }
-
-    public Long getId() {
-        return user.getId();
     }
 
     public Role getRole() {
@@ -33,4 +48,5 @@ public class CurrentUser extends org.springframework.security.core.userdetails.U
                 "user=" + user +
                 "} " + super.toString();
     }
+
 }

@@ -1,21 +1,28 @@
 package com.iyzico.todo.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+
+import com.iyzico.todo.domain.CurrentUser;
+import com.iyzico.todo.domain.Role;
+import com.iyzico.todo.domain.User;
 
 @Service
 public class SecurityServiceImpl implements SecurityService {
 
 	@Autowired
     private AuthenticationManager authenticationManager;
-
+    
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserService userService;
 
 
     @Override
@@ -30,8 +37,17 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public void autologin(String username, String password) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
+    	
+    	Collection<SimpleGrantedAuthority> grantedAuths = new ArrayList<SimpleGrantedAuthority>();
+		grantedAuths.add(new SimpleGrantedAuthority(Role.USER.toString()));
+		
+    	CurrentUser currentUser = new CurrentUser(); 
+    	User user = userService.findByUsername(username);
+    	currentUser.setName(username);
+    	currentUser.setUserRole(Role.USER.toString());
+    	currentUser.setUser(user);
+    	
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(currentUser, password, grantedAuths);
 
         authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 

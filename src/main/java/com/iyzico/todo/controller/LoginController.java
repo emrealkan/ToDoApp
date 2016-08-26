@@ -4,6 +4,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +15,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.iyzico.todo.components.CustomAuthenticationProvider;
 import com.iyzico.todo.model.UserSignUpFormModel;
 import com.iyzico.todo.service.SecurityService;
 import com.iyzico.todo.service.UserServiceImpl;
@@ -29,6 +34,9 @@ public class LoginController {
     private SecurityService securityService;
 	
 	@Autowired
+	private CustomAuthenticationProvider customAuthenticationProvider;
+	
+	@Autowired
 	@Qualifier(value = "userSignUpFormValidator")
 	private UserCreateFormValidator userSignUpFormValidator;
 	
@@ -42,14 +50,15 @@ public class LoginController {
 		return "web/content/login";
 	}
 	
-	@RequestMapping(value={"/about"}, method=RequestMethod.GET)
-	public String getLogin() {
-		return "web/content/about";
-	}
-	
-	@RequestMapping(value={"/home"}, method=RequestMethod.GET)
-	public String getLon() {
-		return "web/content/home";
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public String login(@RequestParam("username") String username,@RequestParam("password") String password) {
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+		Authentication authenticate = customAuthenticationProvider.authenticate(token);
+		if (authenticate != null) {
+			SecurityContextHolder.getContext().setAuthentication(authenticate);	
+			return "web/content/todolist";
+		}
+		return "redirect:/login?error";
 	}
 	
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)

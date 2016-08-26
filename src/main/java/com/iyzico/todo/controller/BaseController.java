@@ -2,27 +2,21 @@ package com.iyzico.todo.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.iyzico.todo.domain.CurrentUser;
 import com.iyzico.todo.domain.User;
-import com.iyzico.todo.service.UserService;
 
 public abstract class BaseController {
-
-	@Autowired
-	private UserService userService;
 	
 	public enum SessionItem{
 		_CURRENT_CONTACT_
 	}
 	
 	public User getCurrentUser() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String userName = authentication.getName();
-		User findByUsername = userService.findByUsername(userName);
-		return findByUsername;
+		CurrentUser currentUser= (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = currentUser.getUser();
+		return user;
 	}
 	
 	@SuppressWarnings("unchecked")
