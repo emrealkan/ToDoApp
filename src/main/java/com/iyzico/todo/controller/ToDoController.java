@@ -44,6 +44,7 @@ public class ToDoController extends BaseController{
 		User currentUser = getCurrentUser();
 		if(currentUser != null){
 			list = toDoService.list(currentUser);	
+			model.addAttribute("userName",currentUser.getUserName() == null ? "" : currentUser.getUserName());
 		}
 		model.addAttribute("todos", list);
 		return "web/content/todolist";
@@ -52,6 +53,10 @@ public class ToDoController extends BaseController{
 	@PreAuthorize("hasAuthority('USER')")
 	@RequestMapping(value="/user/createToDo", method=RequestMethod.GET)
 	public String getCreateToDoView(Model model) {
+		User currentUser = getCurrentUser();
+		if(currentUser != null){
+			model.addAttribute("userName",currentUser.getUserName() == null ? "" : currentUser.getUserName());
+		}
 		model.addAttribute("toDoModel",new ToDoFormModel());
 		return "web/content/createToDo";
 	}
