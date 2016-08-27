@@ -26,19 +26,9 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	@Override
-	public User findByEmailAndPassword(String email, String password) {
-		User user = userRepository.findByEmailAndPassword(email, password);
-		if(user == null){
-			return null;
-		}
-		return user;
-	}
-
-	@Override
 	public Boolean createUser(String userName, String email, String password) {
-		User user = findByEmail(email);
-		if(user == null){
-			user = new User();
+		if(findByEmail(email) == null && findByUsername(userName) == null){
+			User user = new User();
 			user.setEmail(email);
 			user.setName(userName);
 			user.setPassword(password);
@@ -47,5 +37,10 @@ public class UserServiceImpl implements UserService{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public User findById(Long userId) {
+		return userRepository.findById(userId);
 	}
 }

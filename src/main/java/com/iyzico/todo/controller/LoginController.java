@@ -52,7 +52,7 @@ public class LoginController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(@RequestParam("username") String username,@RequestParam("password") String password) {
-		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username.trim(), password.trim());
 		Authentication authenticate = customAuthenticationProvider.authenticate(token);
 		if (authenticate != null) {
 			SecurityContextHolder.getContext().setAuthentication(authenticate);	
@@ -72,12 +72,10 @@ public class LoginController {
 		if (bindingResult.hasErrors()) {
 		    return "web/content/signup";
 		}
-
-		if (userService.createUser(signupModel.getUserName(), signupModel.getEmail(), signupModel.getPassword())) {
-			securityService.autologin(signupModel.getUserName(), signupModel.getPassword());
+		if (userService.createUser(signupModel.getUserName().trim(), signupModel.getEmail().trim(), signupModel.getPassword().trim())) {
+			securityService.autologin(signupModel.getUserName().trim(), signupModel.getPassword().trim());
 			return "redirect:/user/todolist.html";
 		}
 		return "web/content/signup";
 	}
-
 }
