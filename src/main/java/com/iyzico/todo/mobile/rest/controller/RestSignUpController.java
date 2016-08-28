@@ -19,7 +19,7 @@ public class RestSignUpController {
 	@RequestMapping(value = "/api/public/signup", method = RequestMethod.POST)
 	public RestAPIResponse login(@RequestParam("username") String username, @RequestParam("password") String password,
 			@RequestParam("email") String email) {
-
+	
 		if (userService.createUser(username.trim(), email.trim(), password.trim())) {
 			User user = userService.findByUsername(username);
 			return RestAPIResponse.ok(user);

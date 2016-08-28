@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" layout:decorator="web_template">
+<head>
+<title>SignUp</title>
+</head>
+<div layout:fragment="breadcrumbs">
+	<!-- BEGIN BREADCRUMBS -->
+	<div class="row breadcrumbs margin-bottom-40">
+		<div class="container">
+			<div class="col-md-4 col-sm-4">
+				<h1>TODO Signup</h1>
+			</div>
+			<div class="col-md-8 col-sm-8">
+				<ul class="pull-right breadcrumb">
+					<li><a th:href="@{/login}">Login</a></li>
+					<li class="active">Signup</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- END BREADCRUMBS -->
+</div>
+
+<div layout:fragment="content">
+	<div class="container margin-bottom-40">
+		<div class="row">
+			<div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 login-signup-page">
+				<form th:action="@{/signup}" th:object="${signupModel}" method="post">
+					<h2>Signup</h2>
+					<label class="control-label" style="color:red" th:errors="*{userName}"></label>
+					<div class="input-group margin-bottom-20" >
+						<span class="input-group-addon"><i class="fa fa-user"></i></span> <input type="text" class="form-control" th:field="*{userName}" placeholder="Username" name="userName"/>
+					</div>
+					<label class="control-label" style="color:red" th:errors="*{email}"></label> 
+					<div class="input-group margin-bottom-20">
+						<span class="input-group-addon"><i class="fa fa-envelope"></i></span> <input type="text" class="form-control" th:field="*{email}" placeholder="E-mail" name="email"/>
+					</div>
+					<label class="control-label" style="color:red" th:errors="*{password}"></label>
+					<div class="input-group margin-bottom-20">
+						<span class="input-group-addon"><i class="fa fa-lock"></i></span> <input type="password" class="form-control" th:field="*{password}" placeholder="Password" name="password"/>
+					</div>
+					<span class="control-label" style="color:red" th:errors="*{passwordRepeated}"></span>
+					<div class="input-group margin-bottom-20">
+						<span class="input-group-addon"><i class="fa fa-lock"></i></span> <input type="password" class="form-control" th:field="*{passwordRepeated}" placeholder="Confirm password" name="passwordRepeated"/>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<button type="submit" class="btn theme-btn pull-right">Signup</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- END CONTAINER -->
+</div>
+</html>

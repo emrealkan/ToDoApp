@@ -1,9 +1,11 @@
 package com.iyzico.todo.mobile.rest.controller;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.sql.Date;
-import java.util.Locale;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,15 +28,17 @@ public class RestToDoController {
 	@Autowired
 	private UserServiceImpl userService;
 	
-	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 	
-	@RequestMapping(value = "/api/public/getTodos",method = RequestMethod.GET)
+	@RequestMapping(value = "/api/public/getTodos",method = RequestMethod.POST)
 	public RestAPIResponse getTodos(@RequestParam("userId") Long userId) {
 		
 		User user = userService.findById(userId);
 		if(user != null){
 			Iterable<ToDo> list = toDoService.list(user);
-			return RestAPIResponse.ok(list);
+			List<ToDo> targetCollection = new ArrayList<ToDo>();
+			addAll(targetCollection, list.iterator());
+			return RestAPIResponse.ok(targetCollection);
 		}else{
 			return RestAPIResponse.error("User does not exist");
 		}
@@ -45,13 +49,18 @@ public class RestToDoController {
 	public RestAPIResponse createTodo(@RequestParam("userId") Long userId,
 			@RequestParam("title") String title,
 			@RequestParam("subTitle") String subTitle, 
-			@RequestParam("subTitle") String content, 
+			@RequestParam("content") String content, 
 			@RequestParam("endDate") String endDate,
-			@RequestParam("startDate") String startDate) {
+			@RequestParam("startDate") String startDate) throws ParseException {
 		
-		Date startTodoDate = convertFrom(LocalDate.parse(startDate, formatter));
-		Date endTodoDate = convertFrom(LocalDate.parse(endDate, formatter));
-		
+		java.sql.Date startTodoDate;
+		java.sql.Date endTodoDate;
+		try{
+			startTodoDate = new java.sql.Date(formatter.parse(startDate).getTime());
+			endTodoDate = new java.sql.Date(formatter.parse(endDate).getTime());
+		} catch(ParseException e){
+			return RestAPIResponse.error("An error occured calculating start-end Date");
+		}
 		
 		if (startTodoDate.after(endTodoDate)){
 			return RestAPIResponse.error("End date must be after start date");
@@ -74,7 +83,7 @@ public class RestToDoController {
 		
 	}
 	
-	@RequestMapping(value = "/api/public/deleteTodo",method = RequestMethod.DELETE)
+	@RequestMapping(value = "/api/public/deleteTodo",method = RequestMethod.POST)
 	public RestAPIResponse deleteTodo(@RequestParam("todoId") Long todoId) {
 		try{
 			toDoService.deleteToDoById(todoId);
@@ -84,7 +93,10 @@ public class RestToDoController {
 		return RestAPIResponse.ok("success");
 	}
 	
-	public Date convertFrom(LocalDate date) {
-	    return java.sql.Date.valueOf(date);
+	public static <T> void addAll(Collection<T> collection, Iterator<T> iterator) {
+	    while (iterator.hasNext()) {
+	        collection.add(iterator.next());
+	    }
 	}
+	
 }
