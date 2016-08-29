@@ -56,5 +56,4 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 	
-	
 }

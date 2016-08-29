@@ -15,8 +15,11 @@ public abstract class BaseController {
 	
 	public User getCurrentUser() {
 		CurrentUser currentUser= (CurrentUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		User user = currentUser.getUser();
-		return user;
+		if(currentUser != null){
+			User user = currentUser.getUser();
+			return user;
+		}
+		return null;
 	}
 	
 	@SuppressWarnings("unchecked")

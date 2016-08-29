@@ -7,6 +7,7 @@ import org.springframework.validation.Validator;
 
 import com.iyzico.todo.model.UserSignUpFormModel;
 import com.iyzico.todo.service.UserService;
+import com.iyzico.todo.util.ToDoUtil;
 
 @Component(value="userSignUpFormValidator")
 public class UserCreateFormValidator implements Validator {
@@ -25,7 +26,11 @@ public class UserCreateFormValidator implements Validator {
         if(!checkEmptyValue(errors, form)){
         	validatePasswords(errors, form);
             checkExistUserName(errors, form.getUserName());
-            checkExistUserEmail(errors, form.getEmail());
+            if(!ToDoUtil.isValidEmailAddress(form.getEmail())){
+            	errors.rejectValue("email", "error.email.not.valid");
+            }else{
+            	checkExistUserEmail(errors, form.getEmail());
+            }
         }
     }
 
@@ -67,5 +72,4 @@ public class UserCreateFormValidator implements Validator {
             errors.rejectValue("passwordRepeated", "error.passwords.notequal");
         }
     }
-
 }

@@ -28,4 +28,10 @@ public class ToDoServiceImpl implements ToDoService{
 		todoRepository.delete(id);
 	}
 
+	@Override
+	public ToDo findOne(long id) {
+		ToDo todo = todoRepository.findOne(id);
+		return todo;
+	}
+
 }

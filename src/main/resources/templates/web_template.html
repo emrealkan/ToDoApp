@@ -35,16 +35,13 @@ License: You must have a valid license purchased only from themeforest(the above
 <link th:href="@{/assets/plugins/uniform/css/uniform.default.css}" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" th:href="@{/assets/plugins/revolution_slider/css/rs-style.css}" media="screen" />
 <link rel="stylesheet" th:href="@{/assets/plugins/revolution_slider/rs-plugin/css/settings.css}" media="screen" />
-<link href="assets/plugins/bxslider/jquery.bxslider.css" rel="stylesheet" />
 <!-- END PAGE LEVEL PLUGIN STYLES -->
 
 <!-- BEGIN THEME STYLES -->
 <link th:href="@{/assets/css/style-metronic.css}" rel="stylesheet" type="text/css" />
 <link th:href="@{/assets/css/style.css}" rel="stylesheet" type="text/css" />
-<link th:href="@{/assets/css/pages/page404.css}" rel="stylesheet" type="text/css" />
 <link th:href="@{/assets/css/themes/green.css}" rel="stylesheet" type="text/css" id="style_color" />
 <link th:href="@{/assets/css/style-responsive.css}" rel="stylesheet" type="text/css" />
-<link th:href="@{/assets/css/pages/prices.css}" rel="stylesheet" type="text/css" />
 <link th:href="@{/assets/css/custom.css}" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
 
@@ -140,15 +137,11 @@ Following years of experience at well-regarded e-commerce firms in Europe, inclu
 	<script type="text/javascript" th:src="@{assets/plugins/revolution_slider/rs-plugin/js/jquery.themepunch.revolution.min.js}"></script>
 	<script type="text/javascript" th:src="@{assets/plugins/bxslider/jquery.bxslider.min.js}"></script>
 
-	<script th:src="@{/assets/scripts/contact-us.js}"></script>
 	<script th:src="@{/assets/scripts/app.js}" src="/assets/scripts/app.js"></script>
-	<script src="assets/scripts/index.js"></script>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 			App.init();
 			App.initBxSlider();
-			Index.initRevolutionSlider();
-			ContactUs.init();
 		});
 	</script>
 	<!-- END PAGE LEVEL JAVASCRIPTS -->

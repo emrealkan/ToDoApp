@@ -8,5 +8,6 @@ public interface ToDoService {
 	Iterable<ToDo> list(User user);
 	void createToDo(ToDo todo);
 	void deleteToDoById(long id);
+	ToDo findOne(long id);
 	
 }

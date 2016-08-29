@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.iyzico.todo.domain.User;
 import com.iyzico.todo.mobile.rest.components.RestAPIResponse;
 import com.iyzico.todo.service.UserServiceImpl;
+import com.iyzico.todo.util.ToDoUtil;
 
 @RestController
 public class RestSignUpController {
@@ -19,7 +20,11 @@ public class RestSignUpController {
 	@RequestMapping(value = "/api/public/signup", method = RequestMethod.POST)
 	public RestAPIResponse login(@RequestParam("username") String username, @RequestParam("password") String password,
 			@RequestParam("email") String email) {
-	
+		
+		if(ToDoUtil.isValidEmailAddress(email)){
+			return RestAPIResponse.error("Email is not valid.");
+		}
+		
 		if (userService.createUser(username.trim(), email.trim(), password.trim())) {
 			User user = userService.findByUsername(username);
 			return RestAPIResponse.ok(user);
